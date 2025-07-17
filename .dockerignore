@@ -1,5 +1,13 @@
+<<<<<<< HEAD
 target/
 .git/
 .idea/
 *.iml
 *.log
+=======
+target/
+.git/
+.idea/
+*.iml
+*.log
+>>>>>>> fa0c644da005ce0d58be1a109c3bd27db16fa4a4
