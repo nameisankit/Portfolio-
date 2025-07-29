@@ -4,7 +4,7 @@ A simple Spring Boot portfolio application deployed on [Render](https://render.c
 
 ## 🌐 Live Demo
 
-[![Render](https://img.shields.io/badge/Hosted%20on-Render-blue)](https://springboot-render-2-cndj.onrender.com/)
+👉 [**For Live Demo, Click here.**](https://springboot-render-2-cndj.onrender.com/)
 
 
 ---
