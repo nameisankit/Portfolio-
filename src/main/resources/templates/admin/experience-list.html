@@ -78,7 +78,9 @@
                                 </a>
                                 <form th:action="@{|/admin/experience/${e.id}/delete|}" method="post"
                                       onsubmit="return confirm('Delete this experience?');">
-                                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+                                    <!-- is line ko delete / comment karo 
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> -->
                                     <button type="submit" class="btn-danger">
                                         <i class="fas fa-trash"></i>
                                     </button>

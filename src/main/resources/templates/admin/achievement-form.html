@@ -50,7 +50,8 @@
             <div class="admin-form-card">
                 <form th:action="@{/admin/achievements/save}" th:object="${achievement}" method="post">
                     <input type="hidden" th:field="*{id}" />
-                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                    <!-- is line ko delete / comment karo 
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> -->
 
                     <div class="form-group">
                         <label class="form-label">Title</label>

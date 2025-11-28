@@ -38,11 +38,12 @@ public class AdminProfileController {
 
     @PostMapping("/save")
     public String saveProfile(@ModelAttribute Profile profile,
-                              @RequestParam("imageFile") MultipartFile imageFile,
-                              @RequestParam(value = "resumeFile", required = false) MultipartFile resumeFile
+                              @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
+                              @RequestParam(value = "resumeFile", required = false) MultipartFile resumeFile,
+                              @RequestParam(value = "aboutImageFile", required = false) MultipartFile aboutImageFile
     ) throws IOException {
 
-        // --------- ensure single record + preserve old image/resume ----------
+        // ek hi record rakho + purani image/resume/ aboutImage save karo
         Profile existing = null;
 
         if (profile.getId() != null) {
@@ -59,24 +60,41 @@ public class AdminProfileController {
             if (profile.getResumeUrl() == null) {
                 profile.setResumeUrl(existing.getResumeUrl());
             }
+            if (profile.getAboutImageUrl() == null) {
+                profile.setAboutImageUrl(existing.getAboutImageUrl());
+            }
         }
 
-        // --------- profile image upload ----------
+        // PROFILE IMAGE
         if (imageFile != null && !imageFile.isEmpty()) {
             String fileName = StringUtils.cleanPath(imageFile.getOriginalFilename());
-
-            Path uploadPath = Paths.get(uploadDir); // e.g. /uploads
+            Path uploadPath = Paths.get(uploadDir); // uploads
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
             }
-
             Path filePath = uploadPath.resolve(fileName);
             Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
             profile.setProfileImageUrl("/uploads/" + fileName);
         }
 
-        // --------- resume PDF upload ----------
+        // ABOUT IMAGE
+        if (aboutImageFile != null && !aboutImageFile.isEmpty()) {
+            String fileName = "about_" + System.currentTimeMillis() +
+                    "_" + StringUtils.cleanPath(aboutImageFile.getOriginalFilename());
+
+            Path aboutPath = Paths.get(uploadDir, "about"); // uploads/about
+            if (!Files.exists(aboutPath)) {
+                Files.createDirectories(aboutPath);
+            }
+
+            Files.copy(aboutImageFile.getInputStream(),
+                    aboutPath.resolve(fileName),
+                    StandardCopyOption.REPLACE_EXISTING);
+
+            profile.setAboutImageUrl("/uploads/about/" + fileName);
+        }
+
+        // RESUME PDF
         if (resumeFile != null && !resumeFile.isEmpty()) {
             String fileName = "resume_" + System.currentTimeMillis() + ".pdf";
 
