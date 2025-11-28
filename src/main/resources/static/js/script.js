@@ -86,3 +86,94 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
       });
   });
 });
+
+// ==================== PROJECTS SLIDER ====================
+let currentProjectSlide = 0;
+
+function updateProjectSlider() {
+  const track = document.querySelector('.projects-track');
+  const dots = document.querySelectorAll('.projects-dot');
+  const totalSlides = document.querySelectorAll('.project-slide').length;
+
+  if (!track || totalSlides === 0) return;
+
+  track.style.transform = `translateX(-${currentProjectSlide * 100}%)`;
+
+  dots.forEach((dot, index) => {
+    dot.classList.toggle('active', index === currentProjectSlide);
+  });
+}
+
+function changeProjectSlide(direction) {
+  const totalSlides = document.querySelectorAll('.project-slide').length;
+  if (totalSlides === 0) return;
+
+  currentProjectSlide += direction;
+  if (currentProjectSlide < 0) currentProjectSlide = totalSlides - 1;
+  if (currentProjectSlide >= totalSlides) currentProjectSlide = 0;
+
+  updateProjectSlider();
+}
+
+function goToProjectSlide(index) {
+  currentProjectSlide = index;
+  updateProjectSlider();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  updateProjectSlider();
+});
+
+
+// ==================== ACHIEVEMENTS SLIDER ====================
+let currentAchievementSlide = 0;
+
+function updateAchievementSlider() {
+  const track = document.querySelector('.achievements-track');
+  const dots = document.querySelectorAll('.achievements-dot');
+  const totalSlides = document.querySelectorAll('.achievement-slide').length;
+
+  if (!track || totalSlides === 0) return;
+
+  track.style.transform = `translateX(-${currentAchievementSlide * 100}%)`;
+
+  dots.forEach((dot, index) => {
+    dot.classList.toggle('active', index === currentAchievementSlide);
+  });
+}
+
+function changeAchievementSlide(direction) {
+  const totalSlides = document.querySelectorAll('.achievement-slide').length;
+  if (totalSlides === 0) return;
+
+  currentAchievementSlide += direction;
+  if (currentAchievementSlide < 0) currentAchievementSlide = totalSlides - 1;
+  if (currentAchievementSlide >= totalSlides) currentAchievementSlide = 0;
+
+  updateAchievementSlider();
+}
+
+function goToAchievementSlide(index) {
+  currentAchievementSlide = index;
+  updateAchievementSlider();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  updateAchievementSlider();
+});
+
+
+// ================= AUTO SLIDE for PROJECTS & ACHIEVEMENTS =================
+
+// ⏳ time gap (milliseconds) — 5000 = 5 seconds
+const SLIDE_INTERVAL = 3000;
+
+// Project auto-slide
+setInterval(() => {
+  changeProjectSlide(1);
+}, SLIDE_INTERVAL);
+
+// Achievement auto-slide
+setInterval(() => {
+  changeAchievementSlide(1);
+}, SLIDE_INTERVAL);

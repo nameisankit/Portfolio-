@@ -13,81 +13,37 @@
             <div class="about-container">
                 <div class="about-content">
                     <div class="about-tagline">My Background</div>
-                    <h3 class="about-heading">Developer by Profession</h3>
-                    <p class="about-text">
-                        I'm Ankit Parmar -- a passionate web developer who loves solving complex real-world problems through clean,efficient code,With hands-on experience in building full-stack applications using technologies like Java,SpringBoot,React,and MySQL,I've dedicated my career to creating impactful digital solutions that are both scalable and user-friendly.
+
+                    <!-- Heading already dynamic -->
+                    <h3 class="about-heading"
+                        th:text="${profile != null ? profile.title : 'Developer by Profession'}">
+                        Developer by Profession
+                    </h3>
+
+                    <p class="about-text"
+                       th:text="${profile != null ? profile.aboutText : 'About text here...'}">
+                        About text here...
                     </p>
-                   <p class="about-text">
-                       Whether it's developing a sleek landing page, a custom web application, or optimizing a site for performance, I bring creativity, precision, and problem-solving to every project.
-                       When I'm not coding, I love learning about new tech trends, exploring open-source projects, and occasionally designing interfaces that blend aesthetics with usability.
 
-                       Let’s connect and build something great!
-
-                   </p>
-                    <!-- Skills -->
+                    <!-- ⭐ SKILLS – fully dynamic -->
                     <div class="skills-container">
-                        <div class="skill-item">
+                        <div class="skill-item" th:each="skill : ${skills}">
                             <div class="skill-icon">
-                                <i class="fab fa-java"></i>
+                                <!-- yahan Font Awesome class DB se aayegi -->
+                                <i th:class="${skill.iconClass}"></i>
                             </div>
-                            <div class="skill-name">Java</div>
-                        </div>
-
-                        <div class="skill-item">
-                            <div class="skill-icon">
-                                <i class="fas fa-code"></i>
-                            </div>
-                            <div class="skill-name">Spring Boot</div>
-                        </div>
-
-                        <div class="skill-item">
-                            <div class="skill-icon">
-                                <i class="fab fa-js"></i>
-                            </div>
-                            <div class="skill-name">JavaScript</div>
-                        </div>
-
-                        <div class="skill-item">
-                            <div class="skill-icon">
-                                <i class="fab fa-react"></i>
-                            </div>
-                            <div class="skill-name">React</div>
-                        </div>
-
-                        <div class="skill-item">
-                            <div class="skill-icon">
-                                <i class="fas fa-database"></i>
-                            </div>
-                            <div class="skill-name">SQL</div>
-                        </div>
-
-                        <div class="skill-item">
-                            <div class="skill-icon">
-                                <i class="fas fa-server"></i>
-                            </div>
-                            <div class="skill-name">MySQL</div>
-                        </div>
-
-                        <div class="skill-item">
-                            <div class="skill-icon">
-                                <i class="fas fa-cloud"></i>
-                            </div>
-                            <div class="skill-name">AWS</div>
-                        </div>
-
-                        <div class="skill-item">
-                            <div class="skill-icon">
-                                <i class="fas fa-code-branch"></i>
-                            </div>
-                            <div class="skill-name">Git</div>
+                            <div class="skill-name" th:text="${skill.name}"></div>
                         </div>
                     </div>
                 </div>
 
                 <div class="about-visual">
                     <div class="about-image-container">
-                       <div class="about-image-bg"></div>
-                        <img src="/images/hero-section1.jpg" alt="about"  class="about-image">
+                        <div class="about-image-bg"></div>
+                        <!-- ⭐ About image bhi dynamic -->
+                        <img th:src="${profile != null && profile.aboutImageUrl != null ?
+                                      profile.aboutImageUrl : '/images/hero-section1.jpg'}"
+                             alt="about"  class="about-image">
                     </div>
                     <div class="about-decorations">
                         <div class="about-decoration"></div>
@@ -96,8 +52,6 @@
                 </div>
             </div>
         </div>
-
-
     </section>
 
 </th:block>

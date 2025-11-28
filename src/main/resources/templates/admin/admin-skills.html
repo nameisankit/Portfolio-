@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Skills</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/css/style.css">
+
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: radial-gradient(circle at top left, #020617, #020617);
+            color: #e5e7eb;
+            font-family: "Urbanist", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        .admin-main {
+            padding-top: 96px;
+        }
+
+        .admin-form-card {
+            background: rgba(15, 23, 42, 0.95);
+            border-radius: 18px;
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            padding: 1.6rem 1.4rem;
+            max-width: 840px;
+            margin: 0 auto 1.8rem auto;
+        }
+
+        .skills-form-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.2fr);
+            gap: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 0.8rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.85rem;
+            margin-bottom: 0.25rem;
+            color: #cbd5e1;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.6rem 0.9rem;
+            border-radius: 999px;
+            border: 1px solid rgba(148, 163, 184, 0.6);
+            background: rgba(15, 23, 42, 0.9);
+            color: #e5e7eb;
+            outline: none;
+            font-size: 0.9rem;
+        }
+
+        .form-control:focus {
+            border-color: #38bdf8;
+            box-shadow: 0 0 0 1px rgba(56,189,248,0.4);
+        }
+
+        .skills-form-actions {
+            margin-top: 0.8rem;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .btn-primary {
+            border: none;
+            border-radius: 999px;
+            padding: 0.55rem 1.5rem;
+            background: linear-gradient(135deg, #22c55e, #06b6d4);
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .btn-primary i {
+            font-size: 0.85rem;
+        }
+
+        .skills-table-wrapper {
+            max-width: 840px;
+            margin: 0 auto;
+        }
+
+        table.skills-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .skills-table thead {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: #9ca3af;
+        }
+
+        .skills-table th,
+        .skills-table td {
+            padding: 0.55rem 0.2rem;
+            border-bottom: 1px solid rgba(30, 41, 59, 0.9);
+        }
+
+        .skills-table tbody tr:hover {
+            background: rgba(15, 23, 42, 0.7);
+        }
+
+        .icon-preview {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .icon-preview i {
+            font-size: 1rem;
+        }
+
+        .text-muted {
+            font-size: 0.75rem;
+            color: #9ca3af;
+            margin-top: 0.22rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 0.4rem;
+        }
+
+        .btn-chip {
+            border-radius: 999px;
+            padding: 0.25rem 0.7rem;
+            border: 1px solid rgba(148, 163, 184, 0.8);
+            font-size: 0.78rem;
+            text-decoration: none;
+            color: #e5e7eb;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .btn-chip.edit {
+            border-color: #38bdf8;
+        }
+
+        .btn-chip.delete {
+            border-color: #f97373;
+        }
+
+        .btn-chip i {
+            font-size: 0.75rem;
+        }
+
+        .section-title-container {
+            text-align: center;
+        }
+
+        .section-title {
+            margin-bottom: 0.35rem;
+        }
+
+        .section-subtitle {
+            max-width: 420px;
+            margin: 0 auto 1.8rem auto;
+        }
+
+        @media (max-width: 768px) {
+            .skills-form-grid {
+                grid-template-columns: 1fr;
+            }
+            .skills-form-actions {
+                justify-content: stretch;
+            }
+            .btn-primary {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: site-header}"></div>
+
+<main class="admin-main">
+    <section class="section">
+        <div class="container">
+
+            <div class="section-title-container">
+                <h2 class="section-title">Skills</h2>
+                <p class="section-subtitle">
+                    Add / edit skills for About section.
+                </p>
+            </div>
+
+            <!-- Form card -->
+            <div class="admin-form-card">
+                <form th:action="@{/admin/skills/save}" th:object="${skill}" method="post">
+                    <input type="hidden" th:field="*{id}" />
+
+                    <div class="skills-form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Skill Name</label>
+                            <input class="form-control"
+                                   th:field="*{name}"
+                                   placeholder="Java, React, Spring Boot" required />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Icon Class (Font Awesome)</label>
+                            <input class="form-control"
+                                   th:field="*{iconClass}"
+                                   placeholder="fab fa-java, fab fa-react, fas fa-database" required />
+                            <div class="text-muted">
+                                Example: <code>fab fa-java</code>, <code>fab fa-react</code>,
+                                <code>fas fa-database</code>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="skills-form-actions">
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-save"></i>
+                            <span th:text="${skill.id == null ? 'Save Skill' : 'Update Skill'}">Save Skill</span>
+                        </button>
+                    </div>
+                </form>
+
+                <div style="margin-top: 1.4rem;">
+    <a th:href="@{/admin}"
+       style="border-radius:999px; padding:0.55rem 1.3rem; border:1px solid rgba(148,163,184,0.8);
+       font-size:0.9rem; text-decoration:none; color:#e5e7eb; display:inline-flex;
+       align-items:center; gap:0.4rem;">
+        <i class="fas fa-arrow-left"></i> Back to Admin Panel
+    </a>
+</div>
+
+            </div>
+
+            <!-- Existing skills table -->
+            <div class="skills-table-wrapper">
+                <h3 style="margin-bottom:0.6rem;">Existing Skills</h3>
+                <table class="skills-table">
+                    <thead>
+                    <tr>
+                        <th style="width:25%;">Name</th>
+                        <th style="width:45%;">Icon</th>
+                        <th style="width:30%;">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="s : ${skills}">
+                        <td th:text="${s.name}"></td>
+                        <td>
+                            <span class="icon-preview">
+                                <i th:class="${s.iconClass}"></i>
+                                <span th:text="${s.iconClass}"></span>
+                            </span>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <a th:href="@{'/admin/skills/edit/' + ${s.id}}"
+                                   class="btn-chip edit">
+                                    <i class="fas fa-pen"></i> Edit
+                                </a>
+                                <a th:href="@{'/admin/skills/delete/' + ${s.id}}"
+                                   class="btn-chip delete"
+                                   onclick="return confirm('Delete this skill?');">
+                                    <i class="fas fa-trash-alt"></i> Delete
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(skills)}">
+                        <td colspan="3" style="padding-top:0.7rem; color:#9ca3af;">
+                            No skills added yet. Use the form above to add your first skill.
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </section>
+</main>
+
+</body>
+</html>

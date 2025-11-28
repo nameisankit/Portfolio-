@@ -6,26 +6,48 @@
        <div class="hero-background"> </div>
        <div class="container hero-container">
         <div class="hero-content">
-            <div class="hero-greeting"> Hi there, I'm </div>
-      <h1 class="hero-title"><span class="gradient-text"> Ankit Parmar </span> </h1>
-      <h2 clas="hero-subtitle">  Web Developer </h2>
-        <p class="hero-description">
-            I am a full stack web developer with a passion for creating
-            interactive and responsive web applications.I have experience working
-            with HTML, CSS, JavaScript, React , Java , Spring & Spring Boot ,
-            Hibernate, SQL , Servlets , JSP and Git. I am a quick learner and I
-            am always looking to expand my knowledge and skill set. I am a team
-            player and I am excited to work with other to create amazing
-            applications.
-        </p>
-            <div class="hero-buttons">
-           <a href="#projects" class="btn btn-primary">
-               View My Work <i class="fas fa-arrow-right"></i>
-           </a>
-                <a href="#contact" class="btn btn-outline">
-                    Get In Touch
-                </a>
-        </div>
+           <div class="hero-greeting">Hi there, I'm</div>
+
+<h1 class="hero-title">
+    <span class="gradient-text" th:text="${profile != null ? profile.fullName : 'Your Name'}">
+        Your Name
+    </span>
+</h1>
+
+<!-- 👇 yahan dynamic typing wala subtitle -->
+<h2 class="hero-subtitle">
+    I am
+    <span id="typingRole"
+          th:text="${profile != null && profile.title != null ? profile.title : 'Web Developer'}">
+        Web Developer
+    </span>
+</h2>
+
+<p class="hero-description"
+   th:text="${profile != null ? profile.shortBio : 'Short bio here...'}">
+    Short bio here...
+</p>
+
+           <div class="hero-actions">
+    <!-- View My Work -->
+    <a href="#projects" class="btn btn-primary">
+        <span>View My Work</span>
+        <i class="fa-solid fa-arrow-right"></i>
+    </a>
+
+   <a th:if="${profile.resumeUrl != null}"
+   th:href="${profile.resumeUrl}"
+   class="btn btn-primary"
+   target="_blank" rel="noopener">
+    <i class="fa-solid fa-file-arrow-down"></i>
+    My Resume
+</a>
+
+    <!-- Get In Touch -->
+    <a href="#contact" class="btn btn-outline">
+        <span>Get In Touch</span>
+    </a>
+</div>
 
             <div class="social-links" >
                 <a href="tel:+919770338574" class="social-link">
@@ -43,48 +65,18 @@
             </div>
         </div>
 
-
            <div class="hero-visual">
                <div class="hero-visual-inner">
                    <div class="hero-visual-frame">
-                       <img src="/images/profile.png" alt="profile" style="width:90% ; height=90%; object-fit: cover; border-radius: 15px">
+                       <img th:src="${profile != null && profile.profileImageUrl != null ?
+             profile.profileImageUrl : '/images/profile.png'}"
+     alt="profile"
+     style="width:90%; object-fit: cover; border-radius: 15px">
                    </div>
                    <div class="hero-visual-frame"></div>
                    <div class="hero-visual-frame"></div>
                </div>
-        <!--       <div class="hero-stats stats-1">
-                   <div class="hero-stats-icon">
-                       <i class="fas fa-code"> </i>
-                   </div>
-                   <div class="hero-stats-text">
-                       <div class="hero-stats-label"> Developer</div>
-                       <div class="hero-stats-value"> </div>
-                   </div>
-               </div>  -->
-
-       <!--       <div class="hero-stats stats-2">
-                   <div class="hero-stats-icon">
-                       <i class="fa-solid fa-chalkboard-user"> </i>
-                   </div>
-                   <div class="hero-stats-text">
-                       <div class="hero-stats-label"> Developer</div>
-                       <div class="hero-stats-value"> </div>
-                   </div>
-               </div> -->
-
-            <!--   <div class="hero-stats stats-3">
-                   <div class="hero-stats-icon">
-                       <i class="fas fa-code"> </i>
-                   </div>
-                   <div class="hero-stats-text">
-                       <div class="hero-stats-label"> Developer</div>
-                       <div class="hero-stats-value"></div>
-                   </div>
-               </div>  -->
-
-
            </div>
-
 
        </div>
        <div class="scroll-indicator">
@@ -94,5 +86,58 @@
            </div>
        </div>
    </section>
+
+   <!-- ✨ Typing roles + dynamic list (Thymeleaf se) -->
+   <script th:inline="javascript">
+   /*<![CDATA[*/
+       // roles string DB se aayega: "Web Developer, Freelancer, Software Engineer"
+       let roles = /*[[${profile != null && profile.roles != null ? profile.roles.split(',') : null}]]*/ null;
+       const defaultRole = /*[[${profile != null && profile.title != null ? profile.title : 'Web Developer'}]]*/ "Web Developer";
+
+       if (!roles || roles.length === 0) {
+           roles = [defaultRole];
+       } else {
+           roles = roles.map(r => r.trim()).filter(r => r.length > 0);
+           if (roles.length === 0) {
+               roles = [defaultRole];
+           }
+       }
+
+       let index = 0;
+       let charIndex = 0;
+       let deleting = false;
+
+       const speed = 120;
+       const deleteSpeed = 60;
+       const delay = 1500;
+
+       function typeEffect() {
+           const typingElement = document.getElementById("typingRole");
+           if (!typingElement) return;
+
+           const current = roles[index];
+
+           if (!deleting) {
+               typingElement.textContent = current.substring(0, charIndex++);
+               if (charIndex === current.length) {
+                   deleting = true;
+                   setTimeout(typeEffect, delay);
+                   return;
+               }
+           } else {
+               typingElement.textContent = current.substring(0, charIndex--);
+               if (charIndex === 0) {
+                   deleting = false;
+                   index = (index + 1) % roles.length;
+               }
+           }
+
+           setTimeout(typeEffect, deleting ? deleteSpeed : speed);
+       }
+
+       document.addEventListener("DOMContentLoaded", typeEffect);
+   /*]]>*/
+   </script>
+
 </th:block>
 </html>

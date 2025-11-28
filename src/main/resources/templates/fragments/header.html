@@ -1,19 +1,23 @@
-<!DOCTYPE html >
+<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<th:block th:fragment ="site-header" >
-    <header class="header" >
-    <div class="container header-container">
-        <div class="logo">A.<span>P.</span> </div>
-        <nav class="nav" >
-           <div class="nav-links">
-            <a href="#about" class="nav-links">About</a>
-               <a href="#projects" class="nav-links">Projects</a>
-             <!--  <a href="#experience" class="nav-links">Experience</a> -->
-               <a href="#achievements" class="nav-links">Achievements</a>
-               <a href="#contact" class="nav-links">Contact</a>
-           </div>
-        </nav>
-    </div>
+<th:block th:fragment="site-header">
+    <header class="header">
+        <div class="container header-container">
+
+            <!-- Logo ko Admin link bana diya -->
+            <a th:href="@{/admin}" class="logo">A.<span>P.</span></a>
+
+            <nav class="navbar">
+                <a href="#about" class="nav-item">About</a>
+                <a href="#projects" class="nav-item">Projects</a>
+                <a href="#experience" class="nav-item">Experience</a>
+                <a href="#achievements" class="nav-item">Achievements</a>
+                <a href="#contact" class="nav-item">Contact</a>
+
+                <!-- Admin button REMOVE kar diya -->
+                <!-- <a th:href="@{/admin}" class="nav-item">Admin</a> -->
+            </nav>
+        </div>
     </header>
 </th:block>
 </html>
