@@ -45,11 +45,14 @@ public class HomeController {
     public String showHomePage(Model model) {
 
         // ===== Profile =====
-        Profile profile = profileRepository.findAll()
-                .stream()
-                .findFirst()
-                .orElse(null);
-        model.addAttribute("profile", profile);
+// ===== Profile =====
+Profile profile = profileRepository.findAll()
+        .stream()
+        .findFirst()
+        .orElse(new Profile());   // <- yahan null ki jagah NEW Profile()
+
+model.addAttribute("profile", profile);
+
 
         // ⭐ Skills (About section ke liye)
         model.addAttribute("skills", skillRepository.findAll());

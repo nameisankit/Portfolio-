@@ -35,7 +35,8 @@
         <i class="fa-solid fa-arrow-right"></i>
     </a>
 
-   <a th:if="${profile.resumeUrl != null}"
+   <a th:if="${profile != null and profile.resumeUrl != null}"
+
    th:href="${profile.resumeUrl}"
    class="btn btn-primary"
    target="_blank" rel="noopener">
