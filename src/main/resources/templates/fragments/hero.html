@@ -36,12 +36,11 @@
     </a>
 
    <a th:if="${profile != null and profile.resumeUrl != null}"
-
-   th:href="${profile.resumeUrl}"
+   th:href="@{/resume/view}"
    class="btn btn-primary"
    target="_blank" rel="noopener">
-    <i class="fa-solid fa-file-arrow-down"></i>
-    My Resume
+    <i class="fa-solid fa-file-lines"></i>
+    View Resume
 </a>
 
     <!-- Get In Touch -->
