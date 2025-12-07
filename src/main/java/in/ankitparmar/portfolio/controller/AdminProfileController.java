@@ -2,30 +2,23 @@ package in.ankitparmar.portfolio.controller;
 
 import in.ankitparmar.portfolio.model.Profile;
 import in.ankitparmar.portfolio.repository.ProfileRepository;
-import org.springframework.beans.factory.annotation.Value;
+import in.ankitparmar.portfolio.service.FileUploadService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 
 @Controller
 @RequestMapping("/admin/profile")
 public class AdminProfileController {
 
     private final ProfileRepository profileRepository;
+    private final FileUploadService fileUploadService;
 
-    @Value("${file.upload-dir}")
-    private String uploadDir;  // e.g. "uploads"
-
-    public AdminProfileController(ProfileRepository profileRepository) {
+    public AdminProfileController(ProfileRepository profileRepository,
+                                  FileUploadService fileUploadService) {
         this.profileRepository = profileRepository;
+        this.fileUploadService = fileUploadService;
     }
 
     @GetMapping
@@ -41,9 +34,9 @@ public class AdminProfileController {
                               @RequestParam(value = "imageFile", required = false) MultipartFile imageFile,
                               @RequestParam(value = "resumeFile", required = false) MultipartFile resumeFile,
                               @RequestParam(value = "aboutImageFile", required = false) MultipartFile aboutImageFile
-    ) throws IOException {
+    ) throws Exception {
 
-        // ek hi record rakho + purani image/resume/ aboutImage save karo
+        // ek hi record rakho + purani image/resume/aboutImage preserve karo
         Profile existing = null;
 
         if (profile.getId() != null) {
@@ -65,49 +58,22 @@ public class AdminProfileController {
             }
         }
 
-        // PROFILE IMAGE
+        // PROFILE IMAGE → Cloudinary
         if (imageFile != null && !imageFile.isEmpty()) {
-            String fileName = StringUtils.cleanPath(imageFile.getOriginalFilename());
-            Path uploadPath = Paths.get(uploadDir); // uploads
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
-            }
-            Path filePath = uploadPath.resolve(fileName);
-            Files.copy(imageFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-            profile.setProfileImageUrl("/uploads/" + fileName);
+            String imgUrl = fileUploadService.uploadImage(imageFile);
+            profile.setProfileImageUrl(imgUrl);
         }
 
-        // ABOUT IMAGE
+        // ABOUT IMAGE → Cloudinary (alag folder)
         if (aboutImageFile != null && !aboutImageFile.isEmpty()) {
-            String fileName = "about_" + System.currentTimeMillis() +
-                    "_" + StringUtils.cleanPath(aboutImageFile.getOriginalFilename());
-
-            Path aboutPath = Paths.get(uploadDir, "about"); // uploads/about
-            if (!Files.exists(aboutPath)) {
-                Files.createDirectories(aboutPath);
-            }
-
-            Files.copy(aboutImageFile.getInputStream(),
-                    aboutPath.resolve(fileName),
-                    StandardCopyOption.REPLACE_EXISTING);
-
-            profile.setAboutImageUrl("/uploads/about/" + fileName);
+            String aboutImgUrl = fileUploadService.uploadAboutImage(aboutImageFile);
+            profile.setAboutImageUrl(aboutImgUrl);
         }
 
-        // RESUME PDF
+        // RESUME PDF → Cloudinary
         if (resumeFile != null && !resumeFile.isEmpty()) {
-            String fileName = "resume_" + System.currentTimeMillis() + ".pdf";
-
-            Path resumePath = Paths.get(uploadDir, "resume");  // uploads/resume
-            if (!Files.exists(resumePath)) {
-                Files.createDirectories(resumePath);
-            }
-
-            Files.copy(resumeFile.getInputStream(),
-                    resumePath.resolve(fileName),
-                    StandardCopyOption.REPLACE_EXISTING);
-
-            profile.setResumeUrl("/uploads/resume/" + fileName);
+            String resumeUrl = fileUploadService.uploadResume(resumeFile);
+            profile.setResumeUrl(resumeUrl);
         }
 
         profileRepository.save(profile);
