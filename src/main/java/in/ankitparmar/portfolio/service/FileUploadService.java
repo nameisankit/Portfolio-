@@ -36,15 +36,16 @@ public class FileUploadService {
             file.getBytes(),
             ObjectUtils.asMap(
                     "folder", "portfolio/resume",
-                    // PDF ko normal media ki tarah treat karo
-                    "resource_type", "auto",
-                    // Resume ka naam fix & readable rakhen
+                    // PDF ko RAW resource ki tarah upload karo
+                    "resource_type", "raw",
+                    // accha naam + same URL har baar
                     "public_id", "Ankit_Parmar_Resume",
-                    "overwrite", true // naya upload purane ko replace kar dega
+                    "overwrite", true,
+                    "format", "pdf"   // ensure pdf hi rahe
             )
     );
 
-    return (String) result.get("secure_url"); // ye URL .pdf ke saath hoga
+    return (String) result.get("secure_url");
 }
 
 
