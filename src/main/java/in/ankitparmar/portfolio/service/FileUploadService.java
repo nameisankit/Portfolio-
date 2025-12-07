@@ -36,15 +36,12 @@ public class FileUploadService {
             file.getBytes(),
             ObjectUtils.asMap(
                     "folder", "portfolio/resume",
-                    // PDF ko RAW resource ki tarah upload karo
                     "resource_type", "raw",
-                    // accha naam + same URL har baar
                     "public_id", "Ankit_Parmar_Resume",
                     "overwrite", true,
-                    "format", "pdf"   // ensure pdf hi rahe
+                    "format", "pdf"
             )
     );
-
     return (String) result.get("secure_url");
 }
 

@@ -35,12 +35,11 @@
         <i class="fa-solid fa-arrow-right"></i>
     </a>
 
-   <a th:if="${profile != null and profile.resumeUrl != null}"
-   th:href="@{/resume/view}"
-   class="btn btn-primary"
-   target="_blank" rel="noopener">
-    <i class="fa-solid fa-file-lines"></i>
-    View Resume
+  <a th:if="${profile != null and profile.resumeUrl != null}"
+   th:href="${profile.resumeUrl}"
+   class="btn btn-primary">
+    <i class="fa-solid fa-file-arrow-down"></i>
+    Download Resume
 </a>
 
     <!-- Get In Touch -->
