@@ -2,16 +2,10 @@ package in.ankitparmar.portfolio.controller;
 
 import in.ankitparmar.portfolio.model.Profile;
 import in.ankitparmar.portfolio.repository.ProfileRepository;
-import org.springframework.http.ContentDisposition;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import java.io.InputStream;
-import java.net.URL;
+import org.springframework.web.client.RestTemplate;
 
 @Controller
 public class ResumeController {
@@ -24,7 +18,6 @@ public class ResumeController {
 
     @GetMapping("/resume/view")
     public ResponseEntity<byte[]> viewResume() {
-        // ek hi profile record hai, wahi le lete hain
         Profile profile = profileRepository.findAll()
                 .stream().findFirst().orElse(null);
 
@@ -33,15 +26,14 @@ public class ResumeController {
         }
 
         try {
-            // Cloudinary URL se bytes read karo
-            URL url = new URL(profile.getResumeUrl());
+            RestTemplate rest = new RestTemplate();
+            ResponseEntity<byte[]> response =
+                    rest.getForEntity(profile.getResumeUrl(), byte[].class);
 
-            byte[] data;
-            try (InputStream in = url.openStream()) {
-                data = in.readAllBytes();
+            if (response.getBody() == null) {
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
             }
 
-            // proper PDF headers set karo
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_PDF);
             headers.setContentDisposition(
@@ -50,7 +42,7 @@ public class ResumeController {
                             .build()
             );
 
-            return new ResponseEntity<>(data, headers, HttpStatus.OK);
+            return new ResponseEntity<>(response.getBody(), headers, HttpStatus.OK);
 
         } catch (Exception e) {
             e.printStackTrace();
