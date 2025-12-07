@@ -29,18 +29,24 @@ public class FileUploadService {
         return (String) result.get("secure_url");
     }
 
-    public String uploadResume(MultipartFile file) throws Exception {
-        if (file == null || file.isEmpty()) return null;
+   public String uploadResume(MultipartFile file) throws Exception {
+    if (file == null || file.isEmpty()) return null;
 
-        Map result = cloudinary.uploader().upload(
-                file.getBytes(),
-                ObjectUtils.asMap(
-                        "folder", "portfolio/resume",
-                        "resource_type", "raw"
-                )
-        );
-        return (String) result.get("secure_url");
-    }
+    Map result = cloudinary.uploader().upload(
+            file.getBytes(),
+            ObjectUtils.asMap(
+                    "folder", "portfolio/resume",
+                    // PDF ko normal media ki tarah treat karo
+                    "resource_type", "auto",
+                    // Resume ka naam fix & readable rakhen
+                    "public_id", "Ankit_Parmar_Resume",
+                    "overwrite", true // naya upload purane ko replace kar dega
+            )
+    );
+
+    return (String) result.get("secure_url"); // ye URL .pdf ke saath hoga
+}
+
 
         public String uploadAboutImage(MultipartFile file) throws Exception {
         if (file == null || file.isEmpty()) return null;
