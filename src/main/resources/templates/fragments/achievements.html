@@ -1,0 +1,63 @@
+<!DOCTYPE html >
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="achievements-section">
+
+<section class="section achievements" id="achievements">
+    <div class="container">
+        <div class="section-title-container">
+            <h2 class="section-title"> Achievements</h2>
+            <p class="section-subtitle">
+                Recognitions and milestones I've reached along my journey
+            </p>
+        </div>
+
+        <!-- SLIDER WRAPPER -->
+        <div class="achievements-slider-wrapper">
+
+            <!-- Left Arrow -->
+            <button class="achievements-arrow left" onclick="changeAchievementSlide(-1)">
+                &#10094;
+            </button>
+
+            <!-- Visible Window -->
+            <div class="achievements-window">
+                <div class="achievements-track">
+
+                    <!-- SLIDES: 3-3 achievements per slide (controller se achievementSlides aayega) -->
+                    <div class="achievement-slide" th:each="slide, sStat : ${achievementSlides}">
+
+                        <!-- Each achievement card -->
+                        <div class="achievement-card" th:each="a : ${slide}">
+                            <div class="achievement-icon">
+                                <i th:class="${a.iconClass != null ? a.iconClass : 'fa-solid fa-award'}"></i>
+                            </div>
+                            <h3 class="achievement-title" th:text="${a.title}">Achievement Title</h3>
+                            <p class="achievement-description" th:text="${a.description}">
+                                Achievement description...
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Arrow -->
+            <button class="achievements-arrow right" onclick="changeAchievementSlide(1)">
+                &#10095;
+            </button>
+        </div>
+
+        <!-- Dots -->
+        <div class="achievements-dots">
+            <span class="achievements-dot"
+                  th:each="slide, sStat : ${achievementSlides}"
+                  th:classappend="${sStat.index == 0} ? ' active' : ''"
+                  th:onclick="|goToAchievementSlide(${sStat.index})|">
+            </span>
+        </div>
+
+    </div>
+</section>
+
+</th:block>
+</html>

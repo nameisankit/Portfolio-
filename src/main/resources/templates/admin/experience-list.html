@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Experience - Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        body{ margin:0; min-height:100vh; background:radial-gradient(circle at top left,#020617,#020617);
+              color:#e5e7eb; font-family:"Urbanist",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+        .admin-main{ padding-top:96px; }
+        table{ width:100%; border-collapse:collapse; font-size:0.85rem; }
+        th,td{ padding:0.6rem 0.8rem; border-bottom:1px solid rgba(31,41,55,0.9); }
+        th{ text-align:left; color:#9ca3af; }
+        tr:hover td{ background:rgba(15,23,42,0.8); }
+        .btn-primary,.btn-secondary,.btn-danger{
+            border-radius:999px; padding:0.35rem 0.9rem; font-size:0.8rem;
+            border:1px solid transparent; text-decoration:none;
+            display:inline-flex; align-items:center; gap:0.25rem;
+        }
+        .btn-primary{ background:linear-gradient(135deg,#22c55e,#06b6d4); color:#fff; }
+        .btn-secondary{ border-color:rgba(148,163,184,0.8); background:transparent; color:#e5e7eb; }
+        .btn-danger{ background:#dc2626; color:#fff; }
+        .top-bar{ display:flex; justify-content:space-between; align-items:center; margin-bottom:1.2rem; gap:1rem; }
+    </style>
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: site-header}"></div>
+
+<main class="admin-main">
+    <section class="section">
+        <div class="container">
+
+            <div class="section-title-container">
+                <h2 class="section-title">Experience</h2>
+                <p class="section-subtitle">
+                    Manage your professional journey timeline shown in the Experience section.
+                </p>
+            </div>
+
+            <div class="top-bar">
+                <a th:href="@{/admin}" class="btn-secondary">← Back to Admin Panel</a>
+                <a th:href="@{/admin/experience/new}" class="btn-primary">
+                    <i class="fas fa-plus"></i> Add Experience
+                </a>
+            </div>
+
+            <div style="background:rgba(15,23,42,0.95);border-radius:18px;border:1px solid rgba(148,163,184,0.3);padding:1.4rem 1.2rem;overflow-x:auto;">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Date Range</th>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Icon</th>
+                        <th style="width:150px;">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="e, iStat : ${experiences}">
+                        <td th:text="${e.sortOrder != null ? e.sortOrder : iStat.index + 1}">1</td>
+                        <td th:text="${e.dateRange}">March 2024 – Present</td>
+                        <td th:text="${e.title}">Mentor - Java | React | Full Stack</td>
+                        <td th:text="${e.description}">Description</td>
+                        <td>
+                            <code th:text="${e.iconClass}">fa-solid fa-person-chalkboard</code>
+                            <span style="margin-left:0.4rem;">
+                                <i th:class="${e.iconClass}"></i>
+                            </span>
+                        </td>
+                        <td>
+                            <div style="display:flex;gap:0.4rem;">
+                                <a th:href="@{|/admin/experience/${e.id}/edit|}" class="btn-secondary">
+                                    <i class="fas fa-pen"></i> Edit
+                                </a>
+                                <form th:action="@{|/admin/experience/${e.id}/delete|}" method="post"
+                                      onsubmit="return confirm('Delete this experience?');">
+
+                                    <!-- is line ko delete / comment karo 
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> -->
+                                    <button type="submit" class="btn-danger">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(experiences)}">
+                        <td colspan="6" style="padding-top:1rem;color:#9ca3af;">
+                            No experience items yet. Click "Add Experience" to create one.
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </section>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${project.id == null} ? 'Add Project' : 'Edit Project'">Project</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: radial-gradient(circle at top left, #020617, #020617);
+            color: #e5e7eb;
+            font-family: "Urbanist", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+        .admin-main { padding-top: 96px; }
+        .admin-form-card {
+            background: rgba(15,23,42,0.95);
+            border-radius: 18px;
+            border: 1px solid rgba(148,163,184,0.3);
+            padding: 1.8rem 1.6rem;
+            max-width: 780px;
+            margin: 0 auto;
+        }
+        .form-group { margin-bottom: 1rem; }
+        .form-label {
+            display:block;
+            font-size:0.85rem;
+            margin-bottom:0.25rem;
+        }
+        .form-control, textarea.form-control {
+            width:100%;
+            padding:0.6rem 0.9rem;
+            border-radius:999px;
+            border:1px solid rgba(148,163,184,0.6);
+            background:rgba(15,23,42,0.9);
+            color:#e5e7eb;
+            font-size:0.9rem;
+            outline:none;
+        }
+        textarea.form-control {
+            border-radius:14px;
+            min-height:90px;
+            resize:vertical;
+        }
+        .form-control:focus {
+            border-color:#38bdf8;
+            box-shadow:0 0 0 1px rgba(56,189,248,0.5);
+        }
+        .btn-primary {
+            border:none;
+            border-radius:999px;
+            padding:0.6rem 1.6rem;
+            background:linear-gradient(135deg,#22c55e,#06b6d4);
+            color:white;
+            font-weight:600;
+            font-size:0.9rem;
+            cursor:pointer;
+            display:inline-flex;
+            align-items:center;
+            gap:0.4rem;
+        }
+        .btn-secondary {
+            border-radius:999px;
+            padding:0.5rem 1.2rem;
+            border:1px solid rgba(148,163,184,0.8);
+            background:transparent;
+            color:#e5e7eb;
+            font-size:0.85rem;
+            text-decoration:none;
+        }
+        .admin-actions {
+            margin-top:1.4rem;
+            display:flex;
+            justify-content:space-between;
+            gap:1rem;
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="~{fragments/header :: site-header}"></div>
+
+<main class="admin-main">
+    <section class="section">
+        <div class="container">
+
+            <div class="section-title-container">
+                <h2 class="section-title" th:text="${project.id == null} ? 'Add Project' : 'Edit Project'"></h2>
+                <p class="section-subtitle">
+                    Configure title, description, tech stack, GitHub and live links.
+                </p>
+            </div>
+
+            <div class="admin-form-card">
+                <form th:action="@{/admin/projects/save}" th:object="${project}" method="post">
+                    <input type="hidden" th:field="*{id}" />
+
+                    <!-- is line ko delete / comment karo 
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" /> -->
+
+                    <div class="form-group">
+                        <label class="form-label">Title</label>
+                        <input type="text" class="form-control" th:field="*{title}" required/>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Tech Stack (comma separated)</label>
+                        <input type="text" class="form-control" th:field="*{techStack}"
+                               placeholder="Spring Boot, React, MySQL"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control" th:field="*{description}" rows="4"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">GitHub URL</label>
+                        <input type="text" class="form-control" th:field="*{githubUrl}"/>
+                    </div>
+
+                  <div class="form-group">
+    <label class="form-label">Live Demo URL (optional)</label>
+    <input type="text" class="form-control" th:field="*{liveDemoUrl}"
+           placeholder="Leave empty if this project has no live demo"/>
+                </div>
+ 
+
+                    <div class="form-group">
+                        <label class="form-label">Image URL / Path</label>
+                        <input type="text" class="form-control" th:field="*{imageUrl}"
+                               placeholder="/images/thumbnail6.jpg or /uploads/xyz.png"/>
+                    </div>
+
+                    <div class="admin-actions">
+                        <a th:href="@{/admin/projects}" class="btn-secondary">
+                            ← Back to Projects
+                        </a>
+                        <button type="submit" class="btn-primary">
+                            Save Project <i class="fas fa-check"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </section>
+</main>
+
+</body>
+</html>

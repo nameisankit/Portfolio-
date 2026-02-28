@@ -1,0 +1,124 @@
+<th:block th:fragment="contact-section">
+
+    <section class="section contact" id="contact">
+        <div class="container">
+            <div class="section-title-container">
+                <h2 class="section-title">Get In Touch</h2>
+                <p class="section-subtitle">
+                    Have a project in mind or want to collaborate? Let's talk!
+                </p>
+            </div>
+
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h3 class="contact-heading">Let's Build Something Amazing Together</h3>
+                    <p class="contact-text">
+                        I'm always open to discussing new projects, creative ideas or opportunities to be part of your vision.
+                        Feel free to reach out using any of the methods below.
+                    </p>
+
+                    <div class="contact-links">
+
+                        <!-- PHONE -->
+                        <a class="contact-link"
+                           th:href="${contactInfo != null and contactInfo.phone != null
+                                    ? 'tel:' + contactInfo.phone
+                                    : 'tel:+919770338574'}">
+                            <div class="contact-link-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div class="contact-link-text">
+                                <span class="contact-link-label">Phone</span>
+                                <span class="contact-link-value"
+                                      th:text="${contactInfo != null and contactInfo.phone != null
+                                               ? contactInfo.phone
+                                               : '+91 9770338574'}">
+                                    +91 9770338574
+                                </span>
+                            </div>
+                        </a>
+
+                        <!-- EMAIL -->
+                        <a class="contact-link"
+                           th:href="${contactInfo != null and contactInfo.email != null
+                                    ? 'mailto:' + contactInfo.email
+                                    : 'mailto:sendmailstoankit@gmail.com'}">
+                            <div class="contact-link-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-link-text">
+                                <span class="contact-link-label">Email</span>
+                                <span class="contact-link-value"
+                                      th:text="${contactInfo != null and contactInfo.email != null
+                                               ? contactInfo.email
+                                               : 'sendmailstoankit@gmail.com'}">
+                                    sendmailstoankit@gmail.com
+                                </span>
+                            </div>
+                        </a>
+
+                        <!-- LINKEDIN -->
+                        <a class="contact-link"
+                           target="_blank"
+                           th:href="${contactInfo != null and contactInfo.linkedinUrl != null
+                                    ? contactInfo.linkedinUrl
+                                    : 'https://www.linkedin.com/in/ankit-parmar-29b931298'}">
+                            <div class="contact-link-icon">
+                                <i class="fab fa-linkedin-in"></i>
+                            </div>
+                            <div class="contact-link-text">
+                                <span class="contact-link-label">LinkedIn</span>
+                                <span class="contact-link-value"
+                                      th:text="${contactInfo != null and contactInfo.linkedinUrl != null
+                                               ? contactInfo.linkedinUrl
+                                               : 'ankitparmar'}">
+                                    ankitparmar
+                                </span>
+                            </div>
+                        </a>
+
+                    </div>
+                </div>
+
+                <!-- CONTACT FORM -->
+                <div class="contact-form">
+                    <form th:action="@{/contact/send}" method="POST">
+                        <!-- CSRF ko Thymeleaf + Spring automatically add kar lenge
+                             (th:action + SpringSecurity integration ke through) -->
+
+                        <div class="form-group">
+                            <label for="name" class="form-label">Your Name</label>
+                            <input type="text" class="form-control" name="name" id="name"
+                                   placeholder="John Doe" required/>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email" class="form-label">Your Email</label>
+                            <input type="email" class="form-control" name="email" id="email"
+                                   placeholder="john@example.com" required/>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message" class="form-label">Your Message</label>
+                            <textarea class="form-control" name="message" id="message"
+                                      placeholder="Type your message here..." required></textarea>
+                        </div>
+
+                        <button class="btn btn-primary" type="submit">
+                            Send Message <i class="fas fa-paper-plane"></i>
+                        </button>
+
+                        <!-- Success message -->
+                        <p th:if="${successMessage}" class="success-msg"
+                           style="margin-top:12px; color:#22c55e; font-weight:600;">
+                            <i class="fas fa-check-circle"></i>
+                            <span th:text="${successMessage}"></span>
+                        </p>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+</th:block>

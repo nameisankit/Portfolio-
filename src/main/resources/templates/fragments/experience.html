@@ -1,0 +1,119 @@
+<!DOCTYPE html >
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="experience-section">
+
+    <section class="section experience" id="experience">
+        <div class="container">
+            <div class="section-title-container">
+                <h2 class="section-title">Experience</h2>
+                <p class="section-subtitle">
+                    My professional journey and personal journey
+                </p>
+            </div>
+
+            <!-- Center timeline -->
+            <div class="timeline" th:if="${experiences != null}">
+                <div class="timeline-center-line"></div>
+
+                <div class="timeline-item"
+                     th:each="exp, stat : ${experiences}"
+                     th:classappend="${stat.index % 2 == 0} ? ' timeline-item-left' : ' timeline-item-right'">
+
+                    <!-- Date pill on center line -->
+                    <div class="timeline-date-pill">
+                        <span th:text="${exp.dateRange}">Jun 2025 – Present</span>
+                    </div>
+
+                    <!-- Icon marker on line -->
+                    <div class="timeline-marker">
+                        <i th:class="${exp.iconClass != null ? exp.iconClass : 'fa-solid fa-briefcase'}"></i>
+                    </div>
+
+                    <!-- CARD -->
+                    <article class="timeline-card">
+                        <div class="timeline-content">
+
+                            <!-- Role Title -->
+                            <h3 class="timeline-role" th:text="${exp.title}">
+                                Technical Head and Project Manager
+                            </h3>
+
+                            <!-- Organisation -->
+                            <div class="timeline-org" th:text="${exp.organization}">
+                                MII Foundation
+                            </div>
+
+                            <!-- Location -->
+                            <div class="timeline-location" th:text="${exp.location}">
+                                Indore, Madhya Pradesh, India
+                            </div>
+
+                           <!-- Responsibilities / Description as bullets -->
+<!-- 1️⃣ Agar responsibilities bhari hui hai → usse bullets banao -->
+<ul class="timeline-resp-list"
+    th:if="${exp.responsibilities != null and !#strings.isEmpty(exp.responsibilities)}">
+    <li th:each="line : ${#strings.arraySplit(exp.responsibilities, '\\r?\\n')}"
+        th:text="${#strings.trim(line)}">
+        Responsibility line...
+    </li>
+</ul>
+
+
+<!-- 2️⃣ Agar responsibilities KHAALI hai → description ko bullets me tod do -->
+<!-- 2️⃣ Agar responsibilities KHAALI hai → description ko '|' se split karke bullets banao -->
+<ul class="timeline-resp-list"
+    th:if="${(exp.responsibilities == null or #strings.isEmpty(exp.responsibilities))
+             and exp.description != null and !#strings.isEmpty(exp.description)}">
+    <li th:each="line : ${#strings.arraySplit(exp.description, '\\|')}"
+        th:text="${#strings.trim(line)}">
+        Description line...
+    </li>
+</ul>
+
+
+
+                            <!-- Career Growth section -->
+                            <div class="timeline-career"
+                                 th:if="${exp.careerGrowth != null and !#strings.isEmpty(exp.careerGrowth)}">
+                                <h4 class="timeline-career-title">Career Growth</h4>
+
+                                <div class="timeline-career-item"
+                                     th:each="cg : ${#strings.arraySplit(exp.careerGrowth, '\n')}">
+                                    <div class="timeline-career-date"
+                                         th:text="${#strings.arraySplit(cg, '\\|')[0]}">
+                                        June 2025
+                                    </div>
+                                    <div class="timeline-career-text"
+                                         th:text="${#strings.arraySplit(cg, '\\|').length > 1 ? #strings.arraySplit(cg, '\\|')[1] : ''}">
+                                        Promoted to Technical Head based on exceptional performance as Project Manager
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Skills tags -->
+                            <div class="timeline-skills"
+                                 th:if="${exp.skillTags != null and !#strings.isEmpty(exp.skillTags)}">
+                                <span class="timeline-skill-tag"
+                                      th:each="tag : ${#strings.arraySplit(exp.skillTags, ',')}"
+                                      th:text="${#strings.trim(tag)}">
+                                    React.js
+                                </span>
+                            </div>
+
+                        </div>
+                    </article>
+                    <!-- CARD END -->
+
+                </div>
+            </div>
+
+            <!-- Empty state -->
+            <p th:if="${#lists.isEmpty(experiences)}" style="color:#9ca3af;margin-top:1rem;">
+                No experience added yet. Login to admin panel to add your journey.
+            </p>
+
+        </div>
+    </section>
+
+</th:block>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Ankit Parmar - Personal Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+          integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" th:href="@{/css/style.css?v=3}">
+
+</head>
+<body>
+
+    <style>
+  html, body { overflow-x: hidden !important; max-width: 100% !important; }
+  * { box-sizing: border-box !important; }
+  .about-decoration { display: none !important; }
+  .timeline-content { max-width: 100% !important; overflow: hidden !important; }
+  .achievement-slide { min-width: unset !important; width: 100% !important; }
+</style>
+
+<!--loading animation-->
+<div th:replace="~{fragments/loader :: loader}"></div>
+
+<!--Background  shapers
+  <div class="floating-shape shape-1"></div>
+  <div class="floating-shape shape-2"></div>
+  <div class="floating-shape shape-3"></div> -->
+
+<!-- header-->
+<div th:replace="~{fragments/header :: site-header}"></div>
+
+
+<!-- hero section-->
+<div th:replace="~{fragments/hero :: hero-section}"></div>
+
+
+<!-- about section-->
+<div th:replace="~{fragments/about :: about-section}"></div>
+
+<!-- projects section-->
+<div th:replace="~{fragments/projects :: projects-section}"></div>
+
+<!-- experience  section -->
+<div th:replace="~{fragments/experience :: experience-section}"></div> 
+
+<!-- achievements  section-->
+<div th:replace="~{fragments/achievements :: achievements-section}"></div>
+
+<!-- contact  section-->
+<div th:replace="~{fragments/contact :: contact-section}"></div>
+
+<!-- footer  section-->
+<div th:replace="~{fragments/footer :: footer-section}"></div>
+
+
+    <!-- custom script file -->
+<script th:src="@{/js/script.js}"></script>
+
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment="projects-section">
+
+    <section class="section projects" id="projects">
+
+        <div class="container">
+            <div class="section-title-container">
+                <h2 class="section-title"> My Work</h2>
+                <p class="section-subtitle">
+                    Explore some of my recent work, projects
+                </p>
+            </div>
+
+            <!-- 🔥 Slider wrapper -->
+            <div class="projects-slider-wrapper">
+
+                <!-- Left Arrow -->
+                <button class="projects-arrow left" onclick="changeProjectSlide(-1)">
+                    &#10094;
+                </button>
+
+                <!-- Visible Window -->
+                <div class="projects-window">
+                    <div class="projects-track">
+
+                        <!-- ===== SLIDES: 3-3 projects per slide (controller se projectSlides aayega) ===== -->
+                        <div class="project-slide"
+                             th:each="slide, sStat : ${projectSlides}">
+
+                            <!-- Project Card (same as pehle, bas slide ke andar) -->
+                            <div class="project-card" th:each="p : ${slide}">
+                                <div class="project-image">
+                                    <img th:if="${p.imageUrl != null}"
+                                         th:src="${p.imageUrl}"
+                                         alt="project image">
+                                    <div class="project-overlay"></div>
+                                    <div class="project-tags">
+                                        <span class="project-tag" th:text="${p.techStack}">
+                                            Tech Stack
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="project-content">
+                                    <h3 class="project-title" th:text="${p.title}">
+                                        Project Title
+                                    </h3>
+                                    <p class="project-description" th:text="${p.description}">
+                                        Project description...
+                                    </p>
+                                    <div class="project-links">
+                                        <a th:href="${p.githubUrl}"
+                                           class="project-link"
+                                           target="_blank">
+                                            <i class="fab fa-github"></i> View Code
+                                        </a>
+                                       <a th:if="${p.liveDemoUrl != null and !#strings.isEmpty(p.liveDemoUrl)}"
+                                                th:href="${p.liveDemoUrl}"
+                                                 class="project-link"
+                                                    target="_blank">
+                                        Live Demo
+                                         </a>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /project-card -->
+
+                        </div>
+                        <!-- /project-slide -->
+
+                    </div>
+                </div>
+
+                <!-- Right Arrow -->
+                <button class="projects-arrow right" onclick="changeProjectSlide(1)">
+                    &#10095;
+                </button>
+
+            </div>
+            <!-- /projects-slider-wrapper -->
+
+            <!-- Dots -->
+            <div class="projects-dots">
+                <span class="projects-dot"
+                      th:each="slide, sStat : ${projectSlides}"
+                      th:classappend="${sStat.index == 0} ? ' active' : ''"
+                      th:onclick="|goToProjectSlide(${sStat.index})|">
+                </span>
+            </div>
+
+        </div>
+    </section>
+
+</th:block>
+</html>

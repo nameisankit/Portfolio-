@@ -1,0 +1,142 @@
+<!DOCTYPE html >
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:fragment ="hero-section" >
+
+   <section class="hero" id="home">
+       <div class="hero-background"> </div>
+       <div class="container hero-container">
+        <div class="hero-content">
+           <div class="hero-greeting">Hi there, I'm</div>
+
+<h1 class="hero-title">
+    <span class="gradient-text" th:text="${profile != null ? profile.fullName : 'Your Name'}">
+        Your Name
+    </span>
+</h1>
+
+<!-- 👇 yahan dynamic typing wala subtitle -->
+<h2 class="hero-subtitle">
+    I am
+    <span id="typingRole"
+          th:text="${profile != null && profile.title != null ? profile.title : 'Web Developer'}">
+        Web Developer
+    </span>
+</h2>
+
+<p class="hero-description"
+   th:text="${profile != null ? profile.shortBio : 'Short bio here...'}">
+    Short bio here...
+</p>
+
+           <div class="hero-actions">
+    <!-- View My Work -->
+    <a href="#projects" class="btn btn-primary">
+        <span>View My Work</span>
+        <i class="fa-solid fa-arrow-right"></i>
+    </a>
+
+  <a th:if="${profile != null and profile.resumeUrl != null}"
+   th:href="${profile.resumeUrl}"
+   class="btn btn-primary">
+    <i class="fa-solid fa-file-arrow-down"></i>
+    Download Resume
+</a>
+
+    <!-- Get In Touch -->
+    <a href="#contact" class="btn btn-outline">
+        <span>Get In Touch</span>
+    </a>
+</div>
+
+            <div class="social-links" >
+                <a href="tel:+919770338574" class="social-link">
+                <i class="fas fa-phone-alt"></i>
+                </a>
+                <a href="mailto:sendmailstoankit@gmail.com" class="social-link">
+                    <i class="fas fa-envelope"> </i>
+                </a>
+                <a href="https://www.linkedin.com/in/ankit-parmar-29b931298" target="_blank" class="social-link">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+                <a href="https://github.com/nameisankit" target="_blank" class="social-link">
+                    <i class="fab fa-github"></i>
+                </a>
+            </div>
+        </div>
+
+           <div class="hero-visual">
+               <div class="hero-visual-inner">
+                   <div class="hero-visual-frame">
+                       <img th:src="${profile != null && profile.profileImageUrl != null ?
+             profile.profileImageUrl : '/images/profile.png'}"
+     alt="profile"
+     style="width:90%; object-fit: cover; border-radius: 15px">
+                   </div>
+                   <div class="hero-visual-frame"></div>
+                   <div class="hero-visual-frame"></div>
+               </div>
+           </div>
+
+       </div>
+       <div class="scroll-indicator">
+           <span>Scroll Down</span>
+           <div class="scroll-indicator-line">
+               <div class="scroll-indicator-dot"></div>
+           </div>
+       </div>
+   </section>
+
+   <!-- ✨ Typing roles + dynamic list (Thymeleaf se) -->
+   <script th:inline="javascript">
+   /*<![CDATA[*/
+       // roles string DB se aayega: "Web Developer, Freelancer, Software Engineer"
+       let roles = /*[[${profile != null && profile.roles != null ? profile.roles.split(',') : null}]]*/ null;
+       const defaultRole = /*[[${profile != null && profile.title != null ? profile.title : 'Web Developer'}]]*/ "Web Developer";
+
+       if (!roles || roles.length === 0) {
+           roles = [defaultRole];
+       } else {
+           roles = roles.map(r => r.trim()).filter(r => r.length > 0);
+           if (roles.length === 0) {
+               roles = [defaultRole];
+           }
+       }
+
+       let index = 0;
+       let charIndex = 0;
+       let deleting = false;
+
+       const speed = 120;
+       const deleteSpeed = 60;
+       const delay = 1500;
+
+       function typeEffect() {
+           const typingElement = document.getElementById("typingRole");
+           if (!typingElement) return;
+
+           const current = roles[index];
+
+           if (!deleting) {
+               typingElement.textContent = current.substring(0, charIndex++);
+               if (charIndex === current.length) {
+                   deleting = true;
+                   setTimeout(typeEffect, delay);
+                   return;
+               }
+           } else {
+               typingElement.textContent = current.substring(0, charIndex--);
+               if (charIndex === 0) {
+                   deleting = false;
+                   index = (index + 1) % roles.length;
+               }
+           }
+
+           setTimeout(typeEffect, deleting ? deleteSpeed : speed);
+       }
+
+       document.addEventListener("DOMContentLoaded", typeEffect);
+   /*]]>*/
+   </script>
+
+</th:block>
+</html>
